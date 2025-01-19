@@ -8,15 +8,15 @@
 <?php require_once('../inc/header.php'); ?>
 <?php
 
-// قراءة البيانات من ملف CSV
+
 $products = [];
 $file_path = '../data/products.csv';
 
 if (file_exists($file_path)) {
     if (($handle = fopen($file_path, "r")) !== FALSE) {
-        $header = fgetcsv($handle); // قراءة العناوين (الصف الأول)
+        $header = fgetcsv($handle); 
         while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-            if (count($data) == count($header)) { // التحقق من عدد القيم
+            if (count($data) == count($header)) { 
                 $products[] = array_combine($header, $data);
             }
         }
@@ -26,18 +26,17 @@ if (file_exists($file_path)) {
     echo "<div class='alert alert-danger text-center'>CSV file not found.</div>";
 }
 
-// التحقق من إضافة المنتج إلى السلة
 if (isset($_GET['add_to_cart'])) {
     $productId = $_GET['add_to_cart'];
     $found = false;
 
-    // البحث عن المنتج في المصفوفة
+    
     foreach ($products as $product) {
         if ($product['id'] == $productId) {
             $found = true;
-            $product['quantity'] = 1;  // تعيين الكمية 1 بشكل افتراضي
+            $product['quantity'] = 1;  
 
-            // التحقق من أن المنتج غير مكرر في السلة
+          
             if (!isset($_SESSION['cart'])) {
                 $_SESSION['cart'] = [];
             }
@@ -51,7 +50,7 @@ if (isset($_GET['add_to_cart'])) {
             }
 
             if (!$already_in_cart) {
-                $_SESSION['cart'][] = $product; // إضافة المنتج للسلة
+                $_SESSION['cart'][] = $product; 
             }
             break;
         }
@@ -81,22 +80,22 @@ if (isset($_GET['add_to_cart'])) {
                 <?php foreach ($products as $product): ?>
                     <div class="col mb-5">
                         <div class="card h-100">
-                            <!-- صورة المنتج -->
+                            
                             <img class="card-img-top" src="<?php echo !empty($product['image']) ? htmlspecialchars($product['image']) : '../images/default.png'; ?>" alt="Product Image" style="height: 200px; object-fit: cover;" />
                             
-                            <!-- تفاصيل المنتج -->
+                            
                             <div class="card-body p-4">
                                 <div class="text-center">
-                                    <!-- اسم المنتج -->
+                                  
                                     <h5 class="fw-bolder"><?php echo htmlspecialchars($product['name'] ?? 'Unknown Product'); ?></h5>
-                                    <!-- السعر -->
+                                   
                                     <p class="text-muted">
                                         <?php echo isset($product['price']) ? '$' . number_format($product['price'], 2) : 'Price not available'; ?>
                                     </p>
                                 </div>
                             </div>
 
-                            <!-- الإجراءات -->
+                            
                             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                                 <div class="text-center">
                                     <a class="btn btn-outline-dark mt-auto" href="?add_to_cart=<?php echo $product['id']; ?>">Add to cart</a>
