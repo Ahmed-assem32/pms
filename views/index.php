@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-<?php include "../inc/header.php"?>
-<?php include "../inc/nav.php"?>
-    <h1>Home Page</h1>
-<?php include "../inc/footer.php"?>
- 
-=======
 <?php require_once('../inc/header.php'); ?>
 <?php
 
@@ -115,4 +108,4 @@ if (isset($_GET['add_to_cart'])) {
 </section>
 
 <?php require_once('../inc/footer.php'); ?>
->>>>>>> a0ac761c16379d4c28c17dffcb8cfd939d46df6e
+

@@ -1,14 +1,4 @@
 <?php session_start(); ?>
-<<<<<<< HEAD
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>php project</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-  </head>
-=======
 
 <!DOCTYPE html>
 <html lang="en">
@@ -84,8 +74,7 @@
         </div>
     </nav>
 
-    <!-- محتوى الصفحة هنا -->
+   
 
 </body>
 </html>
->>>>>>> a0ac761c16379d4c28c17dffcb8cfd939d46df6e
