@@ -1,5 +1,9 @@
 <?php include "../inc/header.php" ?>
+<<<<<<< HEAD
 <?php include "../inc/nav.php" ?>
+=======
+
+>>>>>>> a0ac761c16379d4c28c17dffcb8cfd939d46df6e
 <div class="container">
     <div class="row">
         <div class="col-8 mx-auto my-5">
@@ -7,7 +11,11 @@
 
             <?php
             if (isset($_SESSION["auth"])) {
+<<<<<<< HEAD
                 header("location:login.php");
+=======
+                header("location:/login.php");
+>>>>>>> a0ac761c16379d4c28c17dffcb8cfd939d46df6e
                 die;
             }
             ?>
@@ -24,7 +32,11 @@
             endif;
 
             ?>
+<<<<<<< HEAD
             <form action="../handelers/handelRegister.php" method="POST" class="border p-3">
+=======
+            <form action="/handels/handelRegister.php" method="POST" class="border p-3">
+>>>>>>> a0ac761c16379d4c28c17dffcb8cfd939d46df6e
                 <div class="form-groupe p-2 my-1">
                     <label for="name">name</label>
                     <input type="text" name="name" class="form-control" placeholder="Username">
