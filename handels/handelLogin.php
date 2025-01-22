@@ -1,16 +1,14 @@
 <?php
 session_start();
-include '../controller/function.php'; 
-include '../controller/validation.php'; 
+include_once '../controller/function.php'; 
+include_once '../controller/validation.php'; 
 
 $errors = [];
 
 if (checkRequestMethod("POST") && checkPostInput("email") && checkPostInput("password")) {
-    
     $email = sanitizeInput($_POST["email"]);
     $password = sanitizeInput($_POST["password"]);
 
-    
     if (!requiredval($email)) {
         $errors[] = "Email is required.";
     } elseif (!emalival($email)) {
@@ -21,14 +19,12 @@ if (checkRequestMethod("POST") && checkPostInput("email") && checkPostInput("pas
         $errors[] = "Password is required.";
     }
 
-   
     if (empty($errors)) {
-        $users_file = fopen("../data/users.csv", "a+");
+        $users_file = fopen("../data/users.csv", "r");
         $isAuthenticated = false;
 
         while (($data = fgetcsv($users_file)) !== false) {
-            
-            if ($data[1] === $email && $data[2] === sha1($password)) {
+            if ($data[1] === $email && password_verify($password, $data[2])) {
                 $isAuthenticated = true;
                 $_SESSION["auth"] = ["name" => $data[0], "email" => $data[1]];
                 break;
@@ -37,17 +33,15 @@ if (checkRequestMethod("POST") && checkPostInput("email") && checkPostInput("pas
         fclose($users_file);
 
         if ($isAuthenticated) {
-            
-            redirect("../views/index.php");
-            
+            header("Location: ../views/index.php");
             exit();
         } else {
-            
             $errors[] = "Invalid email or password.";
         }
     }
 }
+
 $_SESSION["errors"] = $errors;
-redirect("../views/login.php");
+header("Location: ../views/login.php");
 exit();
 ?>

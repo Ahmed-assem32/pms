@@ -1,0 +1,47 @@
+[
+    {
+        "product_id": 1,
+        "product_name": "Laptop",
+        "product_description": "A high-performance laptop.",
+        "product_price": 999.99,
+        "product_image": "laptop.jpg",
+        "product_category": "Electronics",
+        "product_quantity": 10
+    },
+    {
+        "product_id": 2,
+        "product_name": "Smartphone",
+        "product_description": "A latest model smartphone.",
+        "product_price": 599.99,
+        "product_image": "smartphone.jpg",
+        "product_category": "Mobiles",
+        "product_quantity": 15
+    },
+    {
+        "product_id": 3,
+        "product_name": "Airpods Pro",
+        "product_description": "Noise-cancelling earphones.",
+        "product_price": 150,
+        "product_image": "1737508527_679046af7cb39.jpg",
+        "product_category": "Electronics",
+        "product_quantity": 15
+    },
+    {
+        "product_id": 4,
+        "product_name": "airpods pro",
+        "product_description": "sgkufugdtuuyhhj",
+        "product_price": "150",
+        "product_image": "1737551326_6790edde50460.jpg",
+        "product_category": "electronics",
+        "product_quantity": "12"
+    },
+    {
+        "product_id": 5,
+        "product_name": "airpods pro25",
+        "product_description": "sdufsgikrs9hgsrhgir",
+        "product_price": "170",
+        "product_image": "1737555443_6790fdf31f8ee.jpg",
+        "product_category": "electronics",
+        "product_quantity": "5"
+    }
+]

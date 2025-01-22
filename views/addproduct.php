@@ -1,9 +1,9 @@
 <?php require_once "../inc/header.php" ?>
 <?php
 
-$file_path = "../data/products.csv";
+$file_path = "../data/AddProducts.csv";
 
-// التأكد من أن الملف موجود وقابل للقراءة
+
 if (file_exists($file_path) && is_readable($file_path)) {
     $products = [];
     $file = fopen($file_path, "r");

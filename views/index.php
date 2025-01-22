@@ -1,58 +1,55 @@
-<?php require_once('../inc/header.php'); ?>
 <?php
+require_once('../inc/header.php');
+include '../controller/function.php';  
 
 
-$products = [];
-$file_path = '../data/products.csv';
+$file_path = "../data/AddProducts.json";
+$products = loadProductsFromFile($file_path);
 
-if (file_exists($file_path)) {
-    if (($handle = fopen($file_path, "r")) !== FALSE) {
-        $header = fgetcsv($handle); 
-        while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-            if (count($data) == count($header)) { 
-                $products[] = array_combine($header, $data);
-            }
-        }
-        fclose($handle);
-    }
-} else {
-    echo "<div class='alert alert-danger text-center'>CSV file not found.</div>";
+
+if (!isset($_SESSION['cart'])) {
+    $_SESSION['cart'] = [];
 }
 
 if (isset($_GET['add_to_cart'])) {
-    $productId = $_GET['add_to_cart'];
-    $found = false;
+    $product_id = $_GET['add_to_cart'];
+    $product_to_add = null;
 
     
     foreach ($products as $product) {
-        if ($product['id'] == $productId) {
-            $found = true;
-            $product['quantity'] = 1;  
-
-          
-            if (!isset($_SESSION['cart'])) {
-                $_SESSION['cart'] = [];
-            }
-
-            $already_in_cart = false;
-            foreach ($_SESSION['cart'] as $cart_item) {
-                if ($cart_item['id'] == $productId) {
-                    $already_in_cart = true;
-                    break;
-                }
-            }
-
-            if (!$already_in_cart) {
-                $_SESSION['cart'][] = $product; 
-            }
+        if ((string)$product['product_id'] === (string)$product_id) {
+            $product_to_add = $product;
             break;
         }
     }
 
-    if (!$found) {
-        echo "<div class='alert alert-danger text-center'>Product not found.</div>";
+    if ($product_to_add) {
+        $found = false;
+
+   
+        foreach ($_SESSION['cart'] as &$cart_item) {
+            if ((string)$cart_item['product_id'] === (string)$product_to_add['product_id']) {
+                $cart_item['quantity'] += 1;
+                $found = true;
+                break;
+            }
+        }
+
+        if (!$found) {
+            $product_to_add['quantity'] = 1;
+            $_SESSION['cart'][] = $product_to_add;
+        }
+
+        $_SESSION['success'] = "Product added to cart successfully!";
+    } else {
+        $_SESSION['errors'][] = "Product not found!";
     }
+
+ 
+    header("Location: cart.php");
+    exit;
 }
+
 ?>
 
 <!-- Header-->
@@ -68,31 +65,42 @@ if (isset($_GET['add_to_cart'])) {
 <!-- Section-->
 <section class="py-5">
     <div class="container px-4 px-lg-5 mt-5">
+
+        <!-- عرض الرسائل -->
+        <?php if (isset($_SESSION['success'])): ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <?php echo $_SESSION['success']; unset($_SESSION['success']); ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php endif; ?>
+
+        <?php if (!empty($_SESSION['errors'])): ?>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <?php foreach ($_SESSION['errors'] as $error): ?>
+                    <p><?php echo $error; ?></p>
+                <?php endforeach; unset($_SESSION['errors']); ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php endif; ?>
+
         <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
             <?php if (!empty($products)): ?>
                 <?php foreach ($products as $product): ?>
                     <div class="col mb-5">
                         <div class="card h-100">
-                            
-                            <img class="card-img-top" src="<?php echo !empty($product['image']) ? htmlspecialchars($product['image']) : '../images/default.png'; ?>" alt="Product Image" style="height: 200px; object-fit: cover;" />
-                            
-                            
-                            <div class="card-body p-4">
-                                <div class="text-center">
-                                  
-                                    <h5 class="fw-bolder"><?php echo htmlspecialchars($product['name'] ?? 'Unknown Product'); ?></h5>
-                                   
-                                    <p class="text-muted">
-                                        <?php echo isset($product['price']) ? '$' . number_format($product['price'], 2) : 'Price not available'; ?>
-                                    </p>
-                                </div>
+                            <img class="card-img-top" src="../uploads/<?php echo htmlspecialchars($product['product_image'] ?? 'default.png'); ?>" 
+                                 alt="<?php echo htmlspecialchars($product['product_name'] ?? 'Unknown Product'); ?>" 
+                                 style="height: 200px; object-fit: cover;">
+                            <div class="card-body p-4 text-center">
+                                <h5 class="fw-bolder"><?php echo htmlspecialchars($product['product_name'] ?? 'Unknown Product'); ?></h5>
+                                <p class="text-muted">
+                                    <?php echo isset($product['product_price']) ? '$' . number_format($product['product_price'], 2) : 'Price not available'; ?>
+                                </p>
                             </div>
-
-                            
-                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center">
-                                    <a class="btn btn-outline-dark mt-auto" href="?add_to_cart=<?php echo $product['id']; ?>">Add to cart</a>
-                                </div>
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent text-center">
+                                <a class="btn btn-outline-dark mt-auto" href="index.php?add_to_cart=<?php echo urlencode($product['product_id']); ?>">
+                                    Add to cart
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -108,4 +116,3 @@ if (isset($_GET['add_to_cart'])) {
 </section>
 
 <?php require_once('../inc/footer.php'); ?>
-

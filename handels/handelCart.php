@@ -1,39 +1,28 @@
 <?php
+session_start();
+include '../controller/function.php';
 
-
-if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
-    $cart = $_SESSION['cart'];
-    $totalPrice = 0;  
-
-    if (isset($_POST['update_cart'])) {
-        foreach ($_POST['quantity'] as $index => $quantity) {
-            $_SESSION['cart'][$index]['quantity'] = $quantity; 
-        }
-    }
-
-  
-    foreach ($cart as $item) {
-        if (isset($item['price']) && isset($item['quantity'])) {
-            $totalPrice += $item['price'] * $item['quantity'];  
-        }
-    }
+if (!isset($_SESSION['cart'])) {
+    $_SESSION['cart'] = [];
 }
 
+if (isset($_GET['add_to_cart'])) {
+    $product_id = $_GET['add_to_cart'];
+    $file_path = "../data/AddProducts.json";
+    $products = loadProductsFromFile($file_path);
 
-if (isset($_GET['delete'])) {
-    $productIdToDelete = $_GET['delete'];
- 
-    foreach ($_SESSION['cart'] as $index => $item) {
-        if (isset($item['id']) && $item['id'] == $productIdToDelete) {
-            unset($_SESSION['cart'][$index]); 
-            break;
-        }
+    $product = array_filter($products, fn($p) => $p['product_id'] == $product_id);
+    $product = array_shift($product);
+
+    if ($product) {
+        $product['quantity'] = 1;
+        $_SESSION['cart'][] = $product;
+        $_SESSION['success'] = "Product added to cart!";
+    } else {
+        $_SESSION['errors'][] = "Product not found.";
     }
 
-    $_SESSION['cart'] = array_values($_SESSION['cart']);
+    header("Location: cart.php");
+    exit;
 }
-
-
-
-
 ?>

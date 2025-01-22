@@ -1,27 +1,20 @@
 <?php
 
-function requiredval($input) {
-    if (empty($input)) {
-        return false;
-    }
-    return true;
+
+
+// دالة للتحقق من طول المدخل (أكبر من الحد الأدنى)
+function minval($input, $length) {
+    return strlen($input) >= $length;
 }
-function minval($input,$length) {
-    if (strlen($input) < $length) {
-        return false;
-    }
-    return true;
+
+// دالة للتحقق من طول المدخل (أصغر من الحد الأقصى)
+function maxval($input, $length) {
+    return strlen($input) <= $length;
 }
-function maxval($input,$length) {
-    if (strlen($input) > $length) {
-        return false;
-    }
-    return true;
-}
-//---------------------------------------------validtion-EMALI------------------------------------//
+
+//--------------------------------------------- التحقق من البريد الإلكتروني ------------------------------------//
 function emalival($email) {
-    if (!filter_var($email,FILTER_VALIDATE_EMAIL)) {
-        return false;
-    }
-    return true;
+    return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
 }
+
+?>

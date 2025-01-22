@@ -1,7 +1,7 @@
 <?php
 session_start();
-include '../controller/function.php';
-include '../controller/validation.php';
+include_once '../controller/function.php';  // تأكد من أن المسار صحيح
+include_once '../controller/validation.php';
 
 $errors = [];
 if (checkRequestMethod("POST") && checkPostInput("name")) {
@@ -46,8 +46,9 @@ if (checkRequestMethod("POST") && checkPostInput("name")) {
             fclose($users_file);
 
             $_SESSION["success"] = "Registration successful! Please log in.";
-            redirect("../views/login.php");
-            die();  // Ensure that no further code is executed after redirect
+            header("Location: ../views/login.php");
+
+            die();  // تأكد من عدم تنفيذ أي كود بعد التوجيه
         } else {
             $errors[] = "Could not save your data. Please try again later.";
         }
@@ -56,7 +57,9 @@ if (checkRequestMethod("POST") && checkPostInput("name")) {
     // If there are errors, store them in session and redirect back to the register page
     if (!empty($errors)) {
         $_SESSION["errors"] = $errors;
-        redirect("../views/register.php");
+        header("Location: ../views/register.php");
+
         die();
     }
 }
+?>
